@@ -46,13 +46,13 @@ tags:
 
 ### 运行环境配置
 核心调试代码在 core 模块下
-#### 1. 日志文件 log4j.properties 配置文件添加
+#### 日志文件 log4j.properties 配置文件添加
 kafka 运行日志输出使用的是 log4j，需要 log4j 的配置文件，将项目路径下的 config/log4j.properties 拷贝到项目路径 `core/src/main/scala` 目录下。
 
-#### 2. server 启动配置文件 server.properties 修改
+#### server 启动配置文件 server.properties 修改
 可以直接修改项目路径下 `config/server.properties` 的配置内容
 
-#### 3. server 启动配置
+#### server 启动配置
 【idea】操作路径: run -> Edit Configrations.. -> + -> Application
 配置内容：
 * **Main class**: `kafka.Kafka`
@@ -61,7 +61,7 @@ kafka 运行日志输出使用的是 log4j，需要 log4j 的配置文件，将�
 配置如下:
 ![kafka server 启动配置](2019-09-27-IntelliJ-IDEA搭建kafka源码环境/kafka-server-config.jpg)
 
-#### 4. producer 启动配置
+#### producer 启动配置
 【idea】操作路径和上面 server 启动配置一致
 配置内容：
 * **Main class**: `kafka.tools.ConsoleProducer`
@@ -70,7 +70,7 @@ kafka 运行日志输出使用的是 log4j，需要 log4j 的配置文件，将�
 配置如下:
 ![kafka producer 启动配置](2019-09-27-IntelliJ-IDEA搭建kafka源码环境/kafka-producer-config.jpg)
 
-#### 5. consumer 启动配置
+#### consumer 启动配置
 【idea】操作路径和上面 server 启动配置一致
 配置内容：
 * **Main class**: `kafka.tools.ConsoleConsumer`
@@ -79,7 +79,7 @@ kafka 运行日志输出使用的是 log4j，需要 log4j 的配置文件，将�
 配置如下:
 ![kafka consumer 启动配置](2019-09-27-IntelliJ-IDEA搭建kafka源码环境/kafka-consumer-config.jpg)
 
-#### 6. 启动测试
+#### 启动测试
 1. 启动 server
 2. 启动 producer
 3. 启动 consumer
