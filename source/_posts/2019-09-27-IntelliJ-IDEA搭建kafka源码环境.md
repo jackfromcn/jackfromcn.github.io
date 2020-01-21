@@ -92,3 +92,89 @@ kafka producer 启动控制台
 
 kafka consumer 启动控制台
 ![kafka consumer 启动控制台](2019-09-27-IntelliJ-IDEA搭建kafka源码环境/kafka-consumer-start-console.jpg)
+
+#### 启动过程中提示测错误
+
+##### Error:scalac: Error:org.jetbrains.jps.incremental.scala.remote.ServerException:java.lang.StackOverflowError
+```bash
+Error:scalac: Error: org.jetbrains.jps.incremental.scala.remote.ServerException
+java.lang.StackOverflowError
+	at scala.tools.nsc.transform.Erasure$Eraser.typed1(Erasure.scala:773)
+	at scala.tools.nsc.typechecker.Typers$Typer.runTyper$1(Typers.scala:5584)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInternal(Typers.scala:5616)
+	at scala.tools.nsc.typechecker.Typers$Typer.body$2(Typers.scala:5557)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed(Typers.scala:5562)
+	at scala.tools.nsc.typechecker.Typers$Typer.$anonfun$typed1$38(Typers.scala:4708)
+	at scala.tools.nsc.typechecker.Typers$Typer.silent(Typers.scala:698)
+	at scala.tools.nsc.typechecker.Typers$Typer.normalTypedApply$1(Typers.scala:4710)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedApply$1(Typers.scala:4757)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInAnyMode$1(Typers.scala:5530)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed1(Typers.scala:5547)
+	at scala.tools.nsc.transform.Erasure$Eraser.typed1(Erasure.scala:773)
+	at scala.tools.nsc.typechecker.Typers$Typer.runTyper$1(Typers.scala:5584)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInternal(Typers.scala:5616)
+	at scala.tools.nsc.typechecker.Typers$Typer.body$2(Typers.scala:5557)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed(Typers.scala:5562)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedQualifier(Typers.scala:5667)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedQualifier(Typers.scala:5675)
+	at scala.tools.nsc.transform.Erasure$Eraser.adaptMember(Erasure.scala:698)
+	at scala.tools.nsc.transform.Erasure$Eraser.typed1(Erasure.scala:773)
+	at scala.tools.nsc.typechecker.Typers$Typer.runTyper$1(Typers.scala:5584)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInternal(Typers.scala:5616)
+	at scala.tools.nsc.typechecker.Typers$Typer.body$2(Typers.scala:5557)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed(Typers.scala:5562)
+	at scala.tools.nsc.typechecker.Typers$Typer.$anonfun$typed1$38(Typers.scala:4708)
+	at scala.tools.nsc.typechecker.Typers$Typer.silent(Typers.scala:698)
+	at scala.tools.nsc.typechecker.Typers$Typer.normalTypedApply$1(Typers.scala:4710)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedApply$1(Typers.scala:4757)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInAnyMode$1(Typers.scala:5530)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed1(Typers.scala:5547)
+	at scala.tools.nsc.transform.Erasure$Eraser.typed1(Erasure.scala:773)
+	at scala.tools.nsc.typechecker.Typers$Typer.runTyper$1(Typers.scala:5584)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInternal(Typers.scala:5616)
+	at scala.tools.nsc.typechecker.Typers$Typer.body$2(Typers.scala:5557)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed(Typers.scala:5562)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedQualifier(Typers.scala:5667)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedQualifier(Typers.scala:5675)
+	at scala.tools.nsc.transform.Erasure$Eraser.adaptMember(Erasure.scala:698)
+	at scala.tools.nsc.transform.Erasure$Eraser.typed1(Erasure.scala:773)
+	at scala.tools.nsc.typechecker.Typers$Typer.runTyper$1(Typers.scala:5584)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInternal(Typers.scala:5616)
+	at scala.tools.nsc.typechecker.Typers$Typer.body$2(Typers.scala:5557)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed(Typers.scala:5562)
+	at scala.tools.nsc.typechecker.Typers$Typer.$anonfun$typed1$38(Typers.scala:4708)
+	at scala.tools.nsc.typechecker.Typers$Typer.silent(Typers.scala:698)
+	at scala.tools.nsc.typechecker.Typers$Typer.normalTypedApply$1(Typers.scala:4710)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedApply$1(Typers.scala:4757)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInAnyMode$1(Typers.scala:5530)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed1(Typers.scala:5547)
+	at scala.tools.nsc.transform.Erasure$Eraser.typed1(Erasure.scala:773)
+	at scala.tools.nsc.typechecker.Typers$Typer.runTyper$1(Typers.scala:5584)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInternal(Typers.scala:5616)
+	at scala.tools.nsc.typechecker.Typers$Typer.body$2(Typers.scala:5557)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed(Typers.scala:5562)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedQualifier(Typers.scala:5667)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedQualifier(Typers.scala:5675)
+	at scala.tools.nsc.transform.Erasure$Eraser.adaptMember(Erasure.scala:698)
+	at scala.tools.nsc.transform.Erasure$Eraser.typed1(Erasure.scala:773)
+	at scala.tools.nsc.typechecker.Typers$Typer.runTyper$1(Typers.scala:5584)
+	at scala.tools.nsc.typechecker.Typers$Typer.typedInternal(Typers.scala:5616)
+	at scala.tools.nsc.typechecker.Typers$Typer.body$2(Typers.scala:5557)
+	at scala.tools.nsc.typechecker.Typers$Typer.typed(Typers.scala:5562)
+	at scala.tools.nsc.typechecker.Typers$Typer.$anonfun$typed1$38(Typers.scala:4708)
+	at scala.tools.nsc.typechecker.Typers$Typer.silent(Typers.scala:698)
+	at scala.tools.nsc.typechecker.Typers$Typer.normalTypedApply$1(Typers.scala:4710)
+	at ...
+```
+
+在网上查询的出的结论如下：
+> Error:scalac: Error: org.jetbrains.jps.incremental.scala.remote.ServerException
+> reason：JDK与Scala的版本不匹配。
+
+但是实践发现并不好使，错误提示是 **`java.lang.StackOverflowError`** 异常。但是一直没找到 **scala** 的配置。
+在 google stackoverflow 上都是说将 scala compile 的配置一下即可。但是一直找不到。
+
+最后在 idea 右下角找到了 `scala compile server`。如下图所示:
+![idea-scala-compile-server](2019-09-27-IntelliJ-IDEA搭建kafka源码环境/idea-scala-compile-server.png)
+通过上面操作可以发现，scala 编译配置路径: `Preferences | Build, Execution, Deployment` ——> `Compiler` ——> `Scala Compiler` ——> `Scala Compile Server`。将 `JVM Options` 配置中的栈内存大小调大即可。如下图所示：
+![scala-compile-jvmoptions](2019-09-27-IntelliJ-IDEA搭建kafka源码环境/scala-compile-jvmoptions.png)
