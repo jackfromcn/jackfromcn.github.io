@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="nc命令用法举例 转自：nc命令用法举例  什么是ncnc是netcat的简写，有着网络界的瑞士军刀美誉。因为它短小精悍、功能实用，被设计为一个简单、可靠的网络工具 nc的作用 （1）实现任意TCP/UDP端口的侦听，nc可以作为server以TCP或UDP方式侦听指定端口  （2）端口的扫描，nc可以作为client发起TCP或UDP连接 （3）机器之间传输文件 （4）机器之间网络测速">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux 常用命令(二) —— nc">
+<meta property="og:url" content="https://jackfromcn.github.io/2019-10-16/linux-sh/index.html">
+<meta property="og:site_name" content="文成的博客">
+<meta property="og:description" content="nc命令用法举例 转自：nc命令用法举例  什么是ncnc是netcat的简写，有着网络界的瑞士军刀美誉。因为它短小精悍、功能实用，被设计为一个简单、可靠的网络工具 nc的作用 （1）实现任意TCP/UDP端口的侦听，nc可以作为server以TCP或UDP方式侦听指定端口  （2）端口的扫描，nc可以作为client发起TCP或UDP连接 （3）机器之间传输文件 （4）机器之间网络测速">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095517663-1040120011.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095543554-1037638344.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095601413-784407778.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095617601-914929817.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095634851-958356921.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095651569-1755893958.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095712866-936204965.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095732429-1764157681.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095753835-1671845784.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095812632-1749454663.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100707882-1433264712.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100725866-2147390474.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100746272-590584994.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100804726-1083735542.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100817866-337685966.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100833757-599551176.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100847319-1809046272.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100901819-1505522198.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100917507-1008395936.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100931116-1268991306.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209100944897-733297904.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101002038-290824858.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101017632-493505389.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101035476-313895763.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101051101-1053431813.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101107241-716031832.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101124179-1971991069.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101150304-1813015616.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101211132-150010168.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101227069-1285313680.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101252491-2064947286.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101318991-1622147288.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101335976-869694121.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209101801304-671989613.png">
+<meta property="og:updated_time" content="2023-05-17T08:36:07.307Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux 常用命令(二) —— nc">
+<meta name="twitter:description" content="nc命令用法举例 转自：nc命令用法举例  什么是ncnc是netcat的简写，有着网络界的瑞士军刀美誉。因为它短小精悍、功能实用，被设计为一个简单、可靠的网络工具 nc的作用 （1）实现任意TCP/UDP端口的侦听，nc可以作为server以TCP或UDP方式侦听指定端口  （2）端口的扫描，nc可以作为client发起TCP或UDP连接 （3）机器之间传输文件 （4）机器之间网络测速">
+<meta name="twitter:image" content="https://jackfromcn.github.io/2019-10-16/linux-sh/1076878-20161209095517663-1040120011.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jackfromcn.github.io/2019-10-16/linux-sh/">
+
+
+
+
+
+  <title>linux 常用命令(二) —— nc | 文成的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">文成的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jackfromcn.github.io/2019-10-16/linux-sh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wencheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="文成的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux 常用命令(二) —— nc</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-16T03:05:16+00:00">
+                2019-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="nc命令用法举例"><a href="#nc命令用法举例" class="headerlink" title="nc命令用法举例"></a>nc命令用法举例</h2><blockquote>
+<p>转自：<a href="https://www.cnblogs.com/nmap/p/6148306.html" target="_blank" rel="noopener">nc命令用法举例</a></p>
+</blockquote>
+<h1 id="什么是nc"><a href="#什么是nc" class="headerlink" title="什么是nc"></a>什么是nc</h1><p>nc是netcat的简写，有着网络界的瑞士军刀美誉。因为它短小精悍、功能实用，被设计为一个简单、可靠的网络工具</p>
+<h1 id="nc的作用"><a href="#nc的作用" class="headerlink" title="nc的作用"></a>nc的作用</h1><ul>
+<li>（1）实现任意TCP/UDP端口的侦听，nc可以作为server以TCP或UDP方式侦听指定端口 </li>
+<li>（2）端口的扫描，nc可以作为client发起TCP或UDP连接</li>
+<li>（3）机器之间传输文件</li>
+<li>（4）机器之间网络测速                                                                                                             </li>
+</ul>
+<h1 id="nc的控制参数不少，常用的几个参数如下所列："><a href="#nc的控制参数不少，常用的几个参数如下所列：" class="headerlink" title="nc的控制参数不少，常用的几个参数如下所列："></a>nc的控制参数不少，常用的几个参数如下所列：</h1><ul>
+<li>1) -l<br>  用于指定nc将处于侦听模式。指定该参数，则意味着nc被当作server，侦听并接受连接，而非向其它地址发起连接。</li>
+<li>2) -p <port><br>  暂未用到（老版本的nc可能需要在端口号前加-p参数，下面测试环境是centos6.6，nc版本是nc-1.84，未用到-p参数）</port></li>
+<li>3) -s<br>  指定发送数据的源IP地址，适用于多网卡机 </li>
+<li>4) -u<br>  指定nc使用UDP协议，默认为TCP</li>
+<li>5) -v<br>  输出交互或出错信息，新手调试时尤为有用</li>
+<li>6）-w<br>  超时秒数，后面跟数字 </li>
+<li>7）-z<br>  表示zero，表示扫描时不发送任何数据</li>
+</ul>
+<h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><p>准备两台机器，用于测试nc命令的用法<br>主机A：ip地址 10.0.1.161<br>主机B：ip地址 10.0.1.162</p>
+<p>两台机器先安装nc和nmap的包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install nc -y</span><br><span class="line">yum install nmap -y</span><br></pre></td></tr></table></figure>
+
+<p>如果提示如下-bash： nc： command not found 表示没安装nc的包<br><img src="/2019-10-16/linux-sh/1076878-20161209095517663-1040120011.png" alt="img"></p>
+<h1 id="nc用法1，网络连通性测试和端口扫描"><a href="#nc用法1，网络连通性测试和端口扫描" class="headerlink" title="nc用法1，网络连通性测试和端口扫描"></a><strong>nc用法1，网络连通性测试和端口扫描</strong></h1><p><strong>nc可以作为server端启动一个tcp的监听（注意，此处重点是起tcp，下面还会讲udp）</strong><br>先关闭A的防火墙，或者放行下面端口，然后测试B机器是否可以访问A机器启动的端口<br>在A机器上启动一个端口监听，比如 9999端口（注意：下面的-l 是小写的L，不是数字1）</p>
+<p>默认情况下下面监听的是一个tcp的端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l 9999</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209095543554-1037638344.png" alt="img"></p>
+<p><strong>客户端测试，**</strong>测试方法1**<br>在B机器上telnet A机器此端口，如下显示表示B机器可以访问A机器此端口<br><img src="/2019-10-16/linux-sh/1076878-20161209095601413-784407778.png" alt="img"></p>
+<p><strong><em>\</em>客户端测试，\</strong>测试方法2**<br>B机器上也可以使用nmap扫描A机器的此端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap 10.0.1.161 -p9999</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209095617601-914929817.png" alt="img"></p>
+<p><strong><em>\</em>客户端测试，\</strong>测试方法3**</p>
+<p>使用nc命令作为客户端工具进行端口探测</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># （-v可视化，-z扫描时不发送数据，-w超时几秒，后面跟数字）</span></span><br><span class="line">nc -vz -w 2 10.0.1.161 9999</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209095634851-958356921.png" alt="img"></p>
+<p>上面命令也可以写成</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -vzw 2 10.0.1.161 9999</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209095651569-1755893958.png" alt="img"></p>
+<p><strong><em>\</em>客户端测试，\</strong>测试方法4（和方法3相似，但用处更大）**</p>
+<p>nc可以可以扫描连续端口，这个作用非常重要。常常可以用来扫描服务器端口，然后给服务器安全加固</p>
+<p>在A机器上监听2个端口，一个9999，一个9998，使用&amp;符号丢入后台<br><img src="/2019-10-16/linux-sh/1076878-20161209095712866-936204965.png" alt="img"></p>
+<p>在客户端B机器上扫描连续的两个端口，如下<br><img src="/2019-10-16/linux-sh/1076878-20161209095732429-1764157681.png" alt="img"></p>
+<p><strong>nc作为server端启动一个udp的监听（注意，此处重点是起udp，上面主要讲了tcp）</strong></p>
+<p>启动一个udp的端口监听</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc  -ul  9998</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209095753835-1671845784.png" alt="img"></p>
+<p>复制当前窗口输入 netstat -antup |grep 9998 可以看到是启动了udp的监听<br><img src="/2019-10-16/linux-sh/1076878-20161209095812632-1749454663.png" alt="img"></p>
+<p><strong>客户端测试，测试方法1</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#（telnet是运行于tcp协议的）</span></span><br><span class="line"><span class="comment">#（u表示udp端口，v表示可视化输出，z表示扫描时不发送数据）</span></span><br><span class="line">nc -vuz 10.0.1.161 9998</span><br></pre></td></tr></table></figure>
+
+<p>由于udp的端口无法在客户端使用telnet去测试，我们可以使用nc命令去扫描（前面提到nc还可以用来扫描端口）<br><img src="/2019-10-16/linux-sh/1076878-20161209100707882-1433264712.png" alt="img"></p>
+<p>上面在B机器扫描此端口的时候，看到A机器下面出现一串XXXXX字符串<br><img src="/2019-10-16/linux-sh/1076878-20161209100725866-2147390474.png" alt="img"></p>
+<p><strong>客户端测试，测试方法2</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sU 10.0.1.161 -p 9998 -Pn</span><br></pre></td></tr></table></figure>
+
+<p>（它暂无法测试nc启动的udp端口，每次探测nc作为server端启动的udp端口时，会导致对方退出侦听，有这个bug，对于一些程序启动的udp端口在使用nc扫描时不会有此bug）</p>
+<p>下面，A机器启动一个udp的端口监听，端口为9998<br>在复制的窗口上可以确认已经在监听了<br><img src="/2019-10-16/linux-sh/1076878-20161209100746272-590584994.png" alt="img"></p>
+<p>B机器使用nmap命令去扫描此udp端口，在扫描过程中，导致A机器的nc退出监听。所以显示端口关闭了（我推测是扫描时发数据导致的）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -sU ：表示udp端口的扫描</span></span><br><span class="line"><span class="comment"># -Pn ：如果服务器禁PING或者放在防火墙下面的，不加-Pn 参数的它就会认为这个扫描的主机不存活就不会进行扫描了，如果不加-Pn就会像下面的结果一样，它也会进行提示你添加上-Pn参数尝试的</span></span><br><span class="line">nmap -sU 10.0.1.161 -p 9998 -Pn</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209100804726-1083735542.png" alt="img"></p>
+<p>注意：如果A机器开启了防火墙，扫描结果可能会是下面状态。（不能确定对方是否有监听9998端口）<br><img src="/2019-10-16/linux-sh/1076878-20161209100817866-337685966.png" alt="img"></p>
+<p>既然上面测试无法使用nmap扫描nc作为服务端启动的端口，我们可以使用nmap扫描其余的端口<br>（额，有点跑题了，讲nmap的用法了，没关系，主要为了说明nmap是也可以用来扫描udp端口的，只是扫描nc启动的端口会导致对方退出端口监听）</p>
+<p>下面，A机器上rpcbind服务，监听在udp的111端口<br><img src="/2019-10-16/linux-sh/1076878-20161209100833757-599551176.png" alt="img"></p>
+<p>在B机器上使用nmap扫描此端口，是正常的检测到处于open状态<br><img src="/2019-10-16/linux-sh/1076878-20161209100847319-1809046272.png" alt="img"></p>
+<p><strong>客户端测试，测试方法3</strong></p>
+<p><strong>nc扫描大量udp端口</strong></p>
+<p>扫描过程比较慢，可能是1秒扫描一个端口，下面表示扫描A机器的1到1000端口（暂未发现可以在一行命令中扫描分散的几个端口的方法）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -vuz 10.0.1.161 1-1000</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209100901819-1505522198.png" alt="img"></p>
+<h1 id="nc用法2，使用nc传输文件和目录"><a href="#nc用法2，使用nc传输文件和目录" class="headerlink" title="nc用法2，使用nc传输文件和目录"></a><strong>nc用法2，使用nc传输文件和目录</strong></h1><p><strong>方法1，传输文件演示（先启动接收命令）</strong></p>
+<p>使用nc传输文件还是比较方便的，因为不用scp和rsync那种输入密码的操作了<br>把A机器上的一个rpm文件发送到B机器上<br>需注意操作次序，receiver先侦听端口，sender向receiver所在机器的该端口发送数据。  </p>
+<p><strong>步骤1，先在B机器上启动一个接收文件的监听，格式如下</strong></p>
+<p>意思是把赖在9995端口接收到的数据都写到file文件里（这里文件名随意取）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -l port &gt;file</span><br><span class="line">nc -l 9995 &gt;zabbix.rpm</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209100917507-1008395936.png" alt="img"></p>
+<p><strong><em>\</em>步骤2，\</strong>在A机器上往B机器的9995端口发送数据，把下面rpm包发送过去**</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 10.0.1.162 9995 &lt; zabbix-release-2.4-1.el6.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209100931116-1268991306.png" alt="img"></p>
+<p>B机器接收完毕，它会自动退出监听，文件大小和A机器一样，md5值也一样<br><img src="/2019-10-16/linux-sh/1076878-20161209100944897-733297904.png" alt="img"></p>
+<p><strong>方法2，传输文件演示（先启动发送命令）</strong></p>
+<p><strong>步骤1，先在B机器上，启动发送文件命令</strong></p>
+<p>下面命令表示通过本地的9992端口发送test.mv文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l 9992 &lt;test.mv</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101002038-290824858.png" alt="img"></p>
+<p><strong>步骤2，A机器上连接B机器，取接收文件</strong></p>
+<p>下面命令表示通过连接B机器的9992端口接收文件，并把文件存到本目录下，文件名为test2.mv</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 10.0.1.162 9992 &gt;test2.mv</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101017632-493505389.png" alt="img"></p>
+<p><strong>方法3，传输目录演示（方法发送文件类似）</strong></p>
+<p><strong>步骤1，B机器先启动监听，如下</strong><br>A机器给B机器发送多个文件<br>传输目录需要结合其它的命令，比如tar<br>经过我的测试管道后面最后必须是 - ，不能是其余自定义的文件名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l 9995 | tar xfvz -</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101035476-313895763.png" alt="img"></p>
+<p><strong>步骤2，A机器打包文件并连接B机器的端口</strong></p>
+<p>管道前面表示把当前目录的所有文件打包为 - ，然后使用nc发送给B机器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar cfz - * | nc 10.0.1.162 9995</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101051101-1053431813.png" alt="img"></p>
+<p>B机器这边已经自动接收和解压<br><img src="/2019-10-16/linux-sh/1076878-20161209101107241-716031832.png" alt="img"></p>
+<h1 id="nc用法3，测试网速"><a href="#nc用法3，测试网速" class="headerlink" title="nc用法3，测试网速"></a><strong>nc用法3，测试网速</strong></h1><p>测试网速其实利用了传输文件的原理，就是把来自一台机器的/dev/zero 发送给另一台机器的/dev/null<br>就是把一台机器的无限个0，传输给另一个机器的空设备上，然后新开一个窗口使用dstat命令监测网速<br>在这之前需要保证机器先安装dstat工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y dstat</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>方法1，测试网速演示（先启动接收命令方式）</strong></p>
+<p>步骤1，A机器先启动接收数据的命令，监听自己的9991端口，把来自这个端口的数据都输出给空设备（这样不写磁盘，测试网速更准确）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l 9991 &gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101124179-1971991069.png" alt="img"></p>
+<p>步骤2，B机器发送数据，把无限个0发送给A机器的9991端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 10.0.1.161 9991 &lt;/dev/zero</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101150304-1813015616.png" alt="img"></p>
+<p>在复制的窗口上使用dstat命令查看当前网速，dstat命令比较直观，它可以查看当前cpu，磁盘，网络，内存页和系统的一些当前状态指标。<br>我们只需要看下面我选中的这2列即可，recv是receive的缩写，表示接收的意思，send是发送数据，另外注意数字后面的单位B，KB，MB<br><img src="/2019-10-16/linux-sh/1076878-20161209101211132-150010168.png" alt="img"></p>
+<p>可以看到A机器接收数据，平均每秒400MB左右<br><img src="/2019-10-16/linux-sh/1076878-20161209101227069-1285313680.png" alt="img"></p>
+<p>B机器新打开的窗口上执行dstat，看到每秒发送400MB左右的数据</p>
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101252491-2064947286.png" alt="img"></p>
+<p><strong>方法2，测试网速演示（先启动发送命令方式）</strong></p>
+<p>步骤1，先启动发送的数据，谁连接这个端口时就会接收来自zero设备的数据（二进制的无限个0）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l 9990 &lt;/dev/zero</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101318991-1622147288.png" alt="img"></p>
+<p>步骤2，下面B机器连接A机器的9990端口，把接收的数据输出到空设备上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 10.0.1.161 9990 &gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019-10-16/linux-sh/1076878-20161209101335976-869694121.png" alt="img"></p>
+<p>同样可以使用dstat观察数据发送时的网速<br><img src="/2019-10-16/linux-sh/1076878-20161209101801304-671989613.png" alt="img"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags d/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-10/kafkaSourceCode-analysis/" rel="next" title="kafkaServerStartable.startup() 主流程">
+                <i class="fa fa-chevron-left"></i> kafkaServerStartable.startup() 主流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-25/linux-sh/" rel="prev" title="linux 常用命令(三) —— awk">
+                linux 常用命令(三) —— awk <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wencheng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nc命令用法举例"><span class="nav-number">1.</span> <span class="nav-text">nc命令用法举例</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是nc"><span class="nav-number"></span> <span class="nav-text">什么是nc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nc的作用"><span class="nav-number"></span> <span class="nav-text">nc的作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nc的控制参数不少，常用的几个参数如下所列："><span class="nav-number"></span> <span class="nav-text">nc的控制参数不少，常用的几个参数如下所列：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前期准备"><span class="nav-number"></span> <span class="nav-text">前期准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nc用法1，网络连通性测试和端口扫描"><span class="nav-number"></span> <span class="nav-text">nc用法1，网络连通性测试和端口扫描</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nc用法2，使用nc传输文件和目录"><span class="nav-number"></span> <span class="nav-text">nc用法2，使用nc传输文件和目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nc用法3，测试网速"><span class="nav-number"></span> <span class="nav-text">nc用法3，测试网速</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wencheng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

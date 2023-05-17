@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="docker,hexo,CI/CD,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="通过DaoCloud的持续集成发布Hexo博客坑private 代码拉取失败daocloud 创建项目时，可以通过第三方平台关联拉取，也可以直接添加 git 地址进行代码源拉取。如果代码源是 private 项目时，最好通过与第三方平台账号进行关联，否则需要手动添加 public_key。 daocloud 账号与 github 账号绑定失败通过邮箱注册 daocloud 账号后，时间久了忘记了在">
+<meta name="keywords" content="docker,hexo,CI&#x2F;CD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过DaoCloud的持续集成发布Hexo博客">
+<meta property="og:url" content="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/index.html">
+<meta property="og:site_name" content="文成的博客">
+<meta property="og:description" content="通过DaoCloud的持续集成发布Hexo博客坑private 代码拉取失败daocloud 创建项目时，可以通过第三方平台关联拉取，也可以直接添加 git 地址进行代码源拉取。如果代码源是 private 项目时，最好通过与第三方平台账号进行关联，否则需要手动添加 public_key。 daocloud 账号与 github 账号绑定失败通过邮箱注册 daocloud 账号后，时间久了忘记了在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/291603698195_.pic_hd.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/301603698335_.pic_hd.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/311604397505_.pic_hd.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/321604475576_.pic_hd.jpg">
+<meta property="og:updated_time" content="2023-05-17T08:36:07.383Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过DaoCloud的持续集成发布Hexo博客">
+<meta name="twitter:description" content="通过DaoCloud的持续集成发布Hexo博客坑private 代码拉取失败daocloud 创建项目时，可以通过第三方平台关联拉取，也可以直接添加 git 地址进行代码源拉取。如果代码源是 private 项目时，最好通过与第三方平台账号进行关联，否则需要手动添加 public_key。 daocloud 账号与 github 账号绑定失败通过邮箱注册 daocloud 账号后，时间久了忘记了在">
+<meta name="twitter:image" content="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/291603698195_.pic_hd.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/">
+
+
+
+
+
+  <title>通过DaoCloud的持续集成发布Hexo博客 | 文成的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">文成的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jackfromcn.github.io/2020-10-26/hexo-daocloud-cicd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wencheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="文成的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">通过DaoCloud的持续集成发布Hexo博客</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-26T07:30:11+00:00">
+                2020-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="通过DaoCloud的持续集成发布Hexo博客"><a href="#通过DaoCloud的持续集成发布Hexo博客" class="headerlink" title="通过DaoCloud的持续集成发布Hexo博客"></a>通过DaoCloud的持续集成发布Hexo博客</h1><h2 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h2><h3 id="private-代码拉取失败"><a href="#private-代码拉取失败" class="headerlink" title="private 代码拉取失败"></a>private 代码拉取失败</h3><p><strong>daocloud</strong> 创建项目时，可以通过第三方平台关联拉取，也可以直接添加 <code>git</code> 地址进行代码源拉取。<br>如果代码源是 <strong>private</strong> 项目时，最好通过与第三方平台账号进行关联，否则需要手动添加 <code>public_key</code>。<br><img src="/2020-10-26/hexo-daocloud-cicd/291603698195_.pic_hd.jpg" alt="public_key_1"><br><img src="/2020-10-26/hexo-daocloud-cicd/301603698335_.pic_hd.jpg" alt="public_key_2"></p>
+<h3 id="daocloud-账号与-github-账号绑定失败"><a href="#daocloud-账号与-github-账号绑定失败" class="headerlink" title="daocloud 账号与 github 账号绑定失败"></a>daocloud 账号与 github 账号绑定失败</h3><p>通过邮箱注册 <strong>daocloud</strong> 账号后，时间久了忘记了在这个平台注册过账号了，所以后面用 <strong>github</strong> 账号授权注册，发现邮箱已经注册过了。于是通过邮箱登录后，想与 github 账号进行绑定，但是一直提示 <strong>github</strong> 账号已经被绑定，通过 <strong>github</strong> 平台解除授权也不行，后来通过另一个邮箱与 <strong>github</strong> 账号进行了绑定。</p>
+<h3 id="流程定义"><a href="#流程定义" class="headerlink" title="流程定义"></a>流程定义</h3><p>通过本地 <code>daocloud.yml</code> 定义流程时，<code>Tab</code> 键必须是 <code>2个空格</code>,否则会提示格式异常，无法构建。</p>
+<h3 id="根据通过DaoCloud的持续集成发布Hexo博客-操作中遇到的问题"><a href="#根据通过DaoCloud的持续集成发布Hexo博客-操作中遇到的问题" class="headerlink" title="根据通过DaoCloud的持续集成发布Hexo博客 操作中遇到的问题"></a>根据<a href="#ref_link_1">通过DaoCloud的持续集成发布Hexo博客</a> 操作中遇到的问题</h3><h4 id="1-Dockerfile-构建不成功——npm"><a href="#1-Dockerfile-构建不成功——npm" class="headerlink" title="1. Dockerfile 构建不成功——npm"></a>1. <code>Dockerfile</code> 构建不成功——npm</h4><p><strong>错误提示如下</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Step 5/8 : RUN npm install</span><br><span class="line"> ---&gt; Running <span class="keyword">in</span> 09dab438166d</span><br><span class="line">[91mnpm[0m[91m [0m[91mnotice[0m[91m </span><br><span class="line">[0m[91mnpm[0m[91m [0m[91mnotice[0m[91m New patch version of npm available! 7.0.3 -&gt; 7.0.5</span><br><span class="line">[0m[91mnpm[0m[91m [0m[91mnotice[0m[91m Changelog: &lt;https://github.com/npm/cli/releases/tag/v7.0.5&gt;</span><br><span class="line">[0m[91mnpm[0m[91m [0m[91mnotice[0m[91m Run `npm install -g npm@7.0.5` to update!</span><br><span class="line">[0m[91mnpm[0m[91m [0m[91mnotice[0m[91m </span><br><span class="line">[0m[91mnpm[0m[91m [0m[91mERR![0m[91m could not detect node name from path or package</span><br><span class="line">[0m[91m</span><br><span class="line">[0m[91mnpm[0m[91m [0m[91mERR![0m[91m A complete <span class="built_in">log</span> of this run can be found <span class="keyword">in</span>:</span><br><span class="line">[0m[91mnpm[0m[91m [0m[91mERR![0m[91m     /root/.npm/_logs/2020-10-26T08_44_45_121Z-debug.log</span><br><span class="line">[0mRemoving intermediate container 09dab438166d</span><br><span class="line">The <span class="built_in">command</span> <span class="string">'/bin/sh -c npm install'</span> returned a non-zero code: 1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020-10-26/hexo-daocloud-cicd/311604397505_.pic_hd.jpg" alt="ref_link_1_image_1"></p>
+<p><strong>解决方案</strong>:将下面的命令去掉后，构建成功。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">RUN</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line"><span class="string">RUN</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-server</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-Dockerfile-构建不成功——wget"><a href="#2-Dockerfile-构建不成功——wget" class="headerlink" title="2. Dockerfile 构建不成功——wget"></a>2. <code>Dockerfile</code> 构建不成功——wget</h4><p><strong>错误关键字</strong>:<code>wget returned a non-zero code: 4</code>,错误提示如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2020-11-04 06:15:12 (53.4 MB/s) - <span class="string">'node-v12.14.0-linux-x64.tar.xz'</span> saved [14446796/14446796]</span><br><span class="line">[0m</span><br><span class="line">Removing intermediate container 7ac448b27174</span><br><span class="line">The <span class="built_in">command</span> <span class="string">'/bin/sh -c wget https://nodejs.org/download/release/v12.14.0/node-v12.14.0-linux-x64.tar.xz | tar -xf &amp;&amp; mv node-v12.14.0-linux-x64 nodejs &amp;&amp; rm -rf /usr/local/bin/nodejs /usr/local/bin/node /usr/local/bin/npm &amp;&amp; mv nodejs /usr/local/bin &amp;&amp; ln -s /usr/local/bin/nodejs/bin/node /usr/local/bin/ &amp;&amp; ln -s /usr/local/bin/nodejs/bin/npm /usr/local/bin/'</span> returned a non-zero code: 64</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020-10-26/hexo-daocloud-cicd/321604475576_.pic_hd.jpg" alt="ref_link_1_image_1"><br>原因: <code>wget</code> 保存数据时异常，</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 错误的命令</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> wget https://nodejs.org/download/release/v12.14.0/node-v12.14.0-linux-x64.tar.xz</span></span><br><span class="line"><span class="comment"># 修改后的命令</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> wget -q https://nodejs.org/download/release/v12.14.0/node-v12.14.0-linux-x64.tar.xz -O /root/node-v12.14.0-linux-x64.tar.xz</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-hexo-d-命令异常"><a href="#3-hexo-d-命令异常" class="headerlink" title="3. hexo d 命令异常"></a>3. <code>hexo d</code> 命令异常</h4><p><strong><code>hexo d</code> 命令异常提示如下</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">+ hexo d</span><br><span class="line">INFO  Deploying: git</span><br><span class="line">INFO  Setting up Git deployment...</span><br><span class="line">Initialized empty Git repository <span class="keyword">in</span> /daocloud/builder/src/.deploy_git/.git/</span><br><span class="line">[master (root-commit) f5821fc] First commit</span><br><span class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line"> create mode 100644 placeholder</span><br><span class="line">INFO  Clearing .deploy_git folder...</span><br><span class="line">INFO  Copying files from public folder...</span><br><span class="line">FATAL Something<span class="string">'s wrong. Maybe you can find the solution here: https://hexo.io/docs/troubleshooting.html</span></span><br><span class="line"><span class="string">TypeError [ERR_INVALID_ARG_TYPE]: The "mode" argument must be integer. Received an instance of Object</span></span><br><span class="line"><span class="string">    at copyFile (node:fs:1976:10)</span></span><br><span class="line"><span class="string">    at tryCatcher (/daocloud/builder/src/node_modules/bluebird/js/release/util.js:16:23)</span></span><br><span class="line"><span class="string">    at ret (eval at makeNodePromisifiedEval (/usr/local/lib/node_modules/hexo-cli/node_modules/bluebird/js/release/promisify.js:184:12), &lt;anonymous&gt;:13:39)</span></span><br><span class="line"><span class="string">    at /daocloud/builder/src/node_modules/hexo-deployer-git/node_modules/hexo-fs/lib/fs.js:144:39</span></span><br><span class="line"><span class="string">    at tryCatcher (/daocloud/builder/src/node_modules/bluebird/js/release/util.js:16:23)</span></span><br><span class="line"><span class="string">    at Promise._settlePromiseFromHandler (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:517:31)</span></span><br><span class="line"><span class="string">    at Promise._settlePromise (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:574:18)</span></span><br><span class="line"><span class="string">    at Promise._settlePromise0 (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:619:10)</span></span><br><span class="line"><span class="string">    at Promise._settlePromises (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:699:18)</span></span><br><span class="line"><span class="string">    at Promise._fulfill (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:643:18)</span></span><br><span class="line"><span class="string">    at Promise._resolveCallback (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:437:57)</span></span><br><span class="line"><span class="string">    at Promise._settlePromiseFromHandler (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:529:17)</span></span><br><span class="line"><span class="string">    at Promise._settlePromise (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:574:18)</span></span><br><span class="line"><span class="string">    at Promise._settlePromise0 (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:619:10)</span></span><br><span class="line"><span class="string">    at Promise._settlePromises (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:699:18)</span></span><br><span class="line"><span class="string">    at Promise._fulfill (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:643:18)</span></span><br><span class="line"><span class="string">    at Promise._resolveCallback (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:437:57)</span></span><br><span class="line"><span class="string">    at Promise._settlePromiseFromHandler (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:529:17)</span></span><br><span class="line"><span class="string">    at Promise._settlePromise (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:574:18)</span></span><br><span class="line"><span class="string">    at Promise._settlePromise0 (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:619:10)</span></span><br><span class="line"><span class="string">    at Promise._settlePromises (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:699:18)</span></span><br><span class="line"><span class="string">    at Promise._fulfill (/daocloud/builder/src/node_modules/bluebird/js/release/promise.js:643:18)</span></span><br></pre></td></tr></table></figure>
+
+<p>原因是 <strong>node</strong> 版本太高，跟换 <code>12.14</code> 版本的 <strong>node</strong> 即可。<br>在 <strong>Dockerfile</strong> 中进行版本更改，具体如下:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ADD</span><span class="bash"> node-v12.14.0-linux-x64.tar.xz .</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> mv node-v12.14.0-linux-x64 nodejs &amp;&amp; rm -rf /usr/<span class="built_in">local</span>/bin/nodejs /usr/<span class="built_in">local</span>/bin/node /usr/<span class="built_in">local</span>/bin/npm &amp;&amp; mv nodejs /usr/<span class="built_in">local</span>/bin &amp;&amp; ln -s /usr/<span class="built_in">local</span>/bin/nodejs/bin/node /usr/<span class="built_in">local</span>/bin/ &amp;&amp; ln -s /usr/<span class="built_in">local</span>/bin/nodejs/bin/npm /usr/<span class="built_in">local</span>/bin/</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-hexo-command-not-found"><a href="#4-hexo-command-not-found" class="headerlink" title="4. hexo: command not found"></a>4. <code>hexo: command not found</code></h4><p>执行脚本 <code>hexo -v</code> 时，提示 <strong>hexo: command not found</strong>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">+ hexo -v</span><br><span class="line">/daocloud/builder/scripts/script: line 9: hexo: <span class="built_in">command</span> not found</span><br></pre></td></tr></table></figure>
+
+<p>登录到容器中查看，发现 <code>hexo</code> 在之前版本替换时，ln 被删除了，重新 ln 一下就可以了，具体操作如下:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> ln -s /usr/<span class="built_in">local</span>/bin/nodejs/bin/hexo /usr/<span class="built_in">local</span>/bin/hexo</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><span id="ref_link_1"><a href="https://yisihudong.com/2019/06/27/%E9%80%9A%E8%BF%87DaoCloud%E7%9A%84%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E5%8F%91%E5%B8%83Hexo%E5%8D%9A%E5%AE%A2/" target="_blank" rel="noopener">通过DaoCloud的持续集成发布Hexo博客</a><br><a href="https://evestorm.github.io/posts/430/" target="_blank" rel="noopener">node14+版本下hexo部署失败</a><br><a href="https://zhuanlan.zhihu.com/p/136552969" target="_blank" rel="noopener">部署Hexo踩过的坑—node14.0配置hexo</a><br><a href="https://nodejs.org/zh-cn/download/releases/" target="_blank" rel="noopener">node各版本下载</a></span></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags d/docker/" rel="tag"># docker</a>
+          
+            <a href="/tags d/hexo/" rel="tag"># hexo</a>
+          
+            <a href="/tags d/CI-CD/" rel="tag"># CI/CD</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020-10-20/hystrix/" rel="next" title="hystrix 原理">
+                <i class="fa fa-chevron-left"></i> hystrix 原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020-11-04/dockerhub/" rel="prev" title="Dockerhub 镜像构建">
+                Dockerhub 镜像构建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wencheng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#通过DaoCloud的持续集成发布Hexo博客"><span class="nav-number">1.</span> <span class="nav-text">通过DaoCloud的持续集成发布Hexo博客</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#坑"><span class="nav-number">1.1.</span> <span class="nav-text">坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#private-代码拉取失败"><span class="nav-number">1.1.1.</span> <span class="nav-text">private 代码拉取失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#daocloud-账号与-github-账号绑定失败"><span class="nav-number">1.1.2.</span> <span class="nav-text">daocloud 账号与 github 账号绑定失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程定义"><span class="nav-number">1.1.3.</span> <span class="nav-text">流程定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据通过DaoCloud的持续集成发布Hexo博客-操作中遇到的问题"><span class="nav-number">1.1.4.</span> <span class="nav-text">根据通过DaoCloud的持续集成发布Hexo博客 操作中遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Dockerfile-构建不成功——npm"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">1. Dockerfile 构建不成功——npm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Dockerfile-构建不成功——wget"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">2. Dockerfile 构建不成功——wget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-hexo-d-命令异常"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">3. hexo d 命令异常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-hexo-command-not-found"><span class="nav-number">1.1.4.4.</span> <span class="nav-text">4. hexo: command not found</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.2.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wencheng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

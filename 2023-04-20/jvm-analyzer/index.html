@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,jvm,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Jvm性能监控与故障处理写在开头 给一个系统定位问题时，理论知识、经验是关键基础，数据是依据，工具是运用知识处理数据的手 段。 这里说的数据包括:运行日志、异常堆栈、GC日志、线程快照文件(threaddump/javacore文 件)、堆转储快照(heapdump/hprof文件)等。 工具分两大类，一类是命令行工具，一类是可视化工 具。命令行工具是运行期定位线上问题的首选工具。  一、命令行工">
+<meta name="keywords" content="java,jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jvm性能监控与故障处理">
+<meta property="og:url" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/index.html">
+<meta property="og:site_name" content="文成的博客">
+<meta property="og:description" content="Jvm性能监控与故障处理写在开头 给一个系统定位问题时，理论知识、经验是关键基础，数据是依据，工具是运用知识处理数据的手 段。 这里说的数据包括:运行日志、异常堆栈、GC日志、线程快照文件(threaddump/javacore文 件)、堆转储快照(heapdump/hprof文件)等。 工具分两大类，一类是命令行工具，一类是可视化工 具。命令行工具是运行期定位线上问题的首选工具。  一、命令行工">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/Snipaste_2023-04-20_16-47-49.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/jstat_gc.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/jstat_gcutil.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/jac.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/histogram.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/top_consumer.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/group.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/show_busy_java_threads.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/gceasy.png">
+<meta property="og:updated_time" content="2023-05-17T08:36:07.435Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jvm性能监控与故障处理">
+<meta name="twitter:description" content="Jvm性能监控与故障处理写在开头 给一个系统定位问题时，理论知识、经验是关键基础，数据是依据，工具是运用知识处理数据的手 段。 这里说的数据包括:运行日志、异常堆栈、GC日志、线程快照文件(threaddump/javacore文 件)、堆转储快照(heapdump/hprof文件)等。 工具分两大类，一类是命令行工具，一类是可视化工 具。命令行工具是运行期定位线上问题的首选工具。  一、命令行工">
+<meta name="twitter:image" content="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/Snipaste_2023-04-20_16-47-49.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/">
+
+
+
+
+
+  <title>Jvm性能监控与故障处理 | 文成的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">文成的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jackfromcn.github.io/2023-04-20/jvm-analyzer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wencheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="文成的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jvm性能监控与故障处理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-04-20T08:25:42+00:00">
+                2023-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Jvm性能监控与故障处理"><a href="#Jvm性能监控与故障处理" class="headerlink" title="Jvm性能监控与故障处理"></a>Jvm性能监控与故障处理</h1><h3 id="写在开头"><a href="#写在开头" class="headerlink" title="写在开头"></a>写在开头</h3><blockquote>
+<p>给一个系统定位问题时，理论知识、经验是关键基础，数据是依据，工具是运用知识处理数据的手 段。 这里说的数据包括:运行日志、异常堆栈、GC日志、线程快照文件(threaddump/javacore文 件)、堆转储快照(heapdump/hprof文件)等。 工具分两大类，一类是命令行工具，一类是可视化工 具。命令行工具是运行期定位线上问题的首选工具。</p>
+</blockquote>
+<h1 id="一、命令行工具"><a href="#一、命令行工具" class="headerlink" title="一、命令行工具"></a>一、命令行工具</h1><h2 id="1、Sun-Jdk监控和故障处理工具"><a href="#1、Sun-Jdk监控和故障处理工具" class="headerlink" title="1、Sun Jdk监控和故障处理工具:"></a>1、Sun Jdk监控和故障处理工具:</h2><table>
+<thead>
+<tr>
+<th>命令名称</th>
+<th>全称</th>
+<th>主要用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>jps</td>
+<td>jvm process status tool</td>
+<td>显示指定系统内所有的hotspot虚拟机进程</td>
+</tr>
+<tr>
+<td>jstat</td>
+<td>jvm statistics monitoring tool</td>
+<td>用于收集hotspot虚拟机各方面的运行数据</td>
+</tr>
+<tr>
+<td>jinfo</td>
+<td>configuration info for java</td>
+<td>显示虚拟机配置信息</td>
+</tr>
+<tr>
+<td>jmap</td>
+<td>memory map for java</td>
+<td>生成虚拟机的内存转储快照(heapdump文件)</td>
+</tr>
+<tr>
+<td>jhat</td>
+<td>jvm heap dump browser</td>
+<td>用于分析heapmap文件，它会建立一个http/html服务器让用户可以 析结果</td>
+</tr>
+<tr>
+<td>jstack</td>
+<td>stack trace for java</td>
+<td>显示虚拟机的线程快照</td>
+</tr>
+</tbody></table>
+<h2 id="2、常用用法"><a href="#2、常用用法" class="headerlink" title="2、常用用法"></a>2、常用用法</h2><ul>
+<li>用 <code>ps</code>、<code>jps</code> 找出线程号 如果怀疑是死循环、线程类的问题，</li>
+<li>使用 <code>jstack -l</code> 来查看 如果是jvm内存问题，</li>
+<li>使用 <code>jstat</code> 来进行查看，比较常用的是 <code>jstat -gcutil</code></li>
+<li>如果线上问题通过命令行工具不能定位， 可以使用 <code>jmap</code> 导出快 照，使用其他可视化工具进行分析，或者保留一台机器做现场。 注: <code>jmap</code> 可能会 <code>stop the world</code>，暂停 <code>JVM</code>，慎用。</li>
+</ul>
+<h2 id="3、命令详解"><a href="#3、命令详解" class="headerlink" title="3、命令详解"></a>3、命令详解</h2><h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>一般我们想要防止程序启动两次，或者判断某java进程是否存活，都会采用该命令获取系统当前运行的所 有java进程，然后根据进程名判断。当然也可以以此获得对应进程的id(对于本地虚拟机进程来说， LVMID和PID是一致的(用ps命令也可以拿到))，然后kill他来结束程序。其用法如下:<br>语法结构: jsp [options] [hostid] 参数: -q 只输出ID -l 显示虚拟机执行的主类 -m 显示传给main的参数 -v 输出启动的JVM参数</p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>是和线程栈相关的，而栈里边存的则是各个线程的私有数据(局部变量表、方法出口、操作数栈、对象 引用等)，因此该命令就是用来生成当前虚拟机的线程快照的(threaddump，可用来分析虚拟机某线程 长时间停顿的原因，如死锁、死循环、资源请求时间过长等)。<br>语法结构: jstack [ option ] pid 参数: -F当’jstack [-l] pid’没有相应的时候强制打印栈信息 -l长列表. 打印 关于锁的额外的附加信息,例如属于java.util.concurrent的ownable synchronizers列表. -m打印java和native c/c++框架的所有栈信息. -h | -help打印帮助信息</p>
+<p><strong>使用示例</strong><br>jstack可以定位到线程堆栈，根据堆栈信息我们可以定位到具体代码，所以它在JVM性能调优中使用得非常多。下面我们来一个实例找出某个Java进程中最耗费CPU的Java线程并定位堆栈信息，用到的命令有 ps、top、printf、jstack、grep。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一步:找出该进程内最耗费CPU的线程，可以使用任意一个</span></span><br><span class="line">ps -Lfp pid</span><br><span class="line">top -Hp pid</span><br><span class="line"><span class="comment"># TIME列就是各个Java线程耗费的CPU时间，CPU时间最长的是线程ID为21742的线程。输出线程16进制结果</span></span><br><span class="line"><span class="built_in">printf</span> <span class="string">"%x\n"</span> 29105</span><br><span class="line"><span class="comment"># 得到29105的十六进制值为71b1，下面会用到。 下一步使用jstack，它用来输出(dump出)进程29105的当前的堆栈信息，然后根据线程ID的十六进制值grep。</span></span><br><span class="line">jstack pid | grep -A5 0x71b1</span><br></pre></td></tr></table></figure>
+
+<p><strong>其他</strong><br><code>jstack -l pid</code><br><img src="/2023-04-20/jvm-analyzer/Snipaste_2023-04-20_16-47-49.png" alt="jstack"><br>我们一般查看用户进程，每个用户进程包括三部分内容:</p>
+<ul>
+<li>线程的状态</li>
+<li>线程的调用栈</li>
+<li>线程当前锁住的资源</li>
+</ul>
+<p><strong>一些小技巧</strong>:</p>
+<ul>
+<li>死循环: 可多次执行jstack，如果某个用户进程一直runnable，说明这个用户进程一直在运 行，考虑是不是有死循环</li>
+<li>死锁: 存在互相等待，查看锁住的资源。 jstack可以直接检测</li>
+</ul>
+<p><strong>线程状态</strong>:</p>
+<ul>
+<li>NEW: 至今尚未启动的线程的状态(jstack中不会出现)</li>
+<li>RUNNABLE: 可运行线程的线程状态。处于可运行状态的某一线程正在 Java 虚拟机中运行，但它可 能正在等待操作系统中的其他资源，比如处理器。</li>
+<li>BLOCKED: 受阻塞并且正在等待监视器锁的某一线程的线程状态。(比如synchronized (lock) {}而 lock被其他线程持有时，当前线程就会进入BLOCKED状态)</li>
+<li>WAITING 包括3种情况: <ul>
+<li>不带超时值的 Object.wait</li>
+<li>不带超时值的 Thread.join</li>
+<li>LockSupport.park </li>
+</ul>
+</li>
+<li>TIMED_WAITING 包括5种情况:<ul>
+<li>Thread.sleep</li>
+<li>带有超时值的 Object.wait </li>
+<li>带有超时值的 Thread.join </li>
+<li>LockSupport.parkNanos </li>
+<li>LockSupport.parkUntil</li>
+</ul>
+</li>
+<li>TERMINATED 线程已终止(jstack中不会出现)</li>
+</ul>
+<h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><p>jstat用于监控虚拟机各种运行状态信息，可以显示本地或远程虚拟机进程中的类装载、内存、垃圾收集、 JIT编译等运行数据，用于定位内存泄露、FullGC等，推荐在线定位GC问题的首选工具。<br><strong>语法结构</strong>: jstat -<option> [-t] [-h<lines>] <vmid> [<interval> [<count>]] 参数: Options — 选项，我 们一般使用 -gcutil 查看gc情况 vmid — VM的进程号，即当前运行的java进程号 interval– 间隔时间，单 位为秒或者毫秒 count — 打印次数，如果缺省则打印无数次 S0 — Heap上的 Survivor space 0 区已使用 空间的百分比</count></interval></vmid></lines></option></p>
+<h4 id="jstat-gc-pid-200-10"><a href="#jstat-gc-pid-200-10" class="headerlink" title="jstat -gc pid 200 10"></a><code>jstat -gc pid 200 10</code></h4><p><img src="/2023-04-20/jvm-analyzer/jstat_gc.png" alt="jstat"><br>其中各列的具体含义为:</p>
+<ul>
+<li>S0C: 年轻代S0区的容量 S1C:年轻代S1区的容量 S0U:年轻代S0区目前已使用的空间 S1U:年 轻代S1区已使用的容量 EC: 年轻代Eden的容量 EU:年轻代Eden已使用的容量 OC:年老代的容量 OU: 年老代已使用的容量</li>
+<li>PC:Perm的容量 PU:Perm已使用的容量</li>
+<li>YGC: 从启动到现在YoungGC的次数 YGCT:YoungGC所用的时间(s) FGC:从启动到现在FullGC的次数 FGCT: 从启动到现在FullGC所用的时间(s)</li>
+<li>GCT: 从启动到现在GC的总时间</li>
+</ul>
+<h4 id="jstat-gccapacity-pid"><a href="#jstat-gccapacity-pid" class="headerlink" title="jstat -gccapacity pid"></a><code>jstat -gccapacity pid</code></h4><p>查看堆各个代使用的最大最小空间</p>
+<h4 id="jstat-gcutil-pid"><a href="#jstat-gcutil-pid" class="headerlink" title="jstat -gcutil pid"></a><code>jstat -gcutil pid</code></h4><p>查看堆各个代已使用空间占总空间的百分比，最常用的命令<br><img src="/2023-04-20/jvm-analyzer/jstat_gcutil.png" alt="jstat"></p>
+<h4 id="监控各个代的情况"><a href="#监控各个代的情况" class="headerlink" title="监控各个代的情况"></a>监控各个代的情况</h4><p><code>jstat -gcnew</code> 新生代的GC情况<br><code>jstat -gcnewcapacity</code> 新生代的最大、最小空间 jstat -gcold 老年代的GC情况<br><code>jstat -gcoldcapacity</code> 老生代的最大、最小空间 jsata -gcpermcapacity 永久带的最大、最小空间</p>
+<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><p>这个命令可以实时查看调整JVM的运行参数</p>
+<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>jmap用于生成堆转储快照(heapdump，用于JVM内存状态分析，是故障处理或调优的关键参考数<br>据)，还可以查询finalize队列，java堆和永久代详细信息。<br><strong>语法结构</strong>: jmap [ option ] pid 参数: -dump:[live,]format=b,file=<filename> 使用hprof二进制形式,输 出jvm的heap内容到文件=. live子选项是可选的，假如指定live选项,那么只输出活的对象到文件. - finalizerinfo 打印正等候回收的对象的信息. -heap 打印heap的概要信息，GC使用的算法，heap的配置及 wise heap的使用情况. -histo[:live] 打印每个class的实例数目,内存占用,类全名信息. VM的内部类名字开头 会加上前缀”*”. 如果live子参数加上后,只统计活的对象数量. -clstats 打印classload和jvm heap长久层的信 息. 包含每个classloader的名字,活泼性,地址,父classloader和加载的class数量. 另外,内部String的数量和占 用内存数也会打印出来. -F 强迫.在pid没有响应的时候使用-dump或者-histo参数. 在这个模式下,live子参 数无效. -h | -help 打印辅助信息 -J 传递参数给jmap启动的jvm.</filename></p>
+<h4 id="jmap-permstat-pid"><a href="#jmap-permstat-pid" class="headerlink" title="jmap -permstat pid"></a><code>jmap -permstat pid</code></h4><p>打印进程的类加载器和类加载器加载的持久代对象信息，输出:类加载器名称、对象是否存活(不可靠)、对象地址、父类加载器、已加载的类大小等信息</p>
+<h4 id="jmap-heap-pid"><a href="#jmap-heap-pid" class="headerlink" title="jmap -heap pid"></a><code>jmap -heap pid</code></h4><p>查看进程堆内存使用情况，包括使用的GC算法、堆配置参数和各代中堆内存使用情况</p>
+<h4 id="jmap-histo-live-pid"><a href="#jmap-histo-live-pid" class="headerlink" title="jmap -histo[:live] pid"></a><code>jmap -histo[:live] pid</code></h4><p>查看堆内存中的对象数目、大小统计直方图，如果带上live则只统计活对象</p>
+<h4 id="jmap-dump-format-b-file-dumpFileName-pid"><a href="#jmap-dump-format-b-file-dumpFileName-pid" class="headerlink" title="jmap -dump:format=b,file=dumpFileName pid"></a><code>jmap -dump:format=b,file=dumpFileName pid</code></h4><p>用jmap把进程内存使用情况dump到文件中，再用jhat或者<code>mat</code>分析查看</p>
+<h2 id="二、可视化工具"><a href="#二、可视化工具" class="headerlink" title="二、可视化工具"></a>二、可视化工具</h2><h3 id="MAT"><a href="#MAT" class="headerlink" title="MAT"></a>MAT</h3><h3 id="线程栈分析"><a href="#线程栈分析" class="headerlink" title="线程栈分析"></a>线程栈分析</h3><ol>
+<li>在线方式:<a href="http://www.fastthread.io" target="_blank" rel="noopener">线程栈分析工具网站</a></li>
+<li>本地 <code>jca</code> 可视化工具分析:<a href="/download/2023/2023-04-20-jvm-analyzer/jca4614.jar">jca</a><br>下面介绍本地可视化工具操作步骤:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 运行服务器上执行:输出线程栈到文件中(这里不管是本地方案，还是在线方案都需要先转储服务栈信息)</span></span><br><span class="line">jstack 进程号 &gt; 进程号.txt </span><br><span class="line"><span class="comment"># 2. 在本地 jca4614.jar 目录下执行</span></span><br><span class="line">java -jar jca4614.jar</span><br><span class="line"><span class="comment"># 3. 将线程栈文件拖拽到可视化工具中进行分析</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>分析结果如下图所示:<br><img src="/2023-04-20/jvm-analyzer/jac.png" alt="jac"></p>
+<h4 id="常用功能"><a href="#常用功能" class="headerlink" title="常用功能"></a>常用功能</h4><ul>
+<li><code>Histogram</code>:列出内存中的对象，对象的个数以及大小(单位是字节)</li>
+<li><code>Dominator Tree</code>:列出最大的对象以及其依赖存活的Object (大小是以Retained Heap为标准排序的)</li>
+<li><code>Top Consumers</code>: 通过图形列出最大的object</li>
+<li><code>Thread OvewView</code>:可以查看这个应用的Thread信息</li>
+<li><code>Group</code>: 在Histogram和Domiantor Tree界面，可以选择将结果用另一种Group的方式显示(默认是Group by Object)，切换到Group by package，可以更好地查看具体是哪个包里的类占用内存大，也很容易定 位到自己的应用程</li>
+<li><code>Path to GC Root</code>: 在Histogram或者Domiantor Tree的某一个条目上，右键可以查看其GC Root Path,可以 查看对象的各类引用关系</li>
+</ul>
+<p>其中前两项 <code>Histogram</code> 和 <code>Dominator Tree</code> 是最常用的，注意若dump文件过大时，mat软件打开有可能会堆栈溢出，此时需要修改 <code>mat.app/Contents/Eclipse</code> 文件夹中有一个 <code>MemoryAnalyzer.ini</code> ,修改-Xmx=xxg即可。</p>
+<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><p><strong><code>histogram</code> 展示</strong><br><img src="/2023-04-20/jvm-analyzer/histogram.png" alt="histogram"></p>
+<p><strong>top consumer展示</strong><br><img src="/2023-04-20/jvm-analyzer/top_consumer.png" alt="top_consumer"></p>
+<p><strong>group功能展示</strong><br><img src="/2023-04-20/jvm-analyzer/group.png" alt="group"></p>
+<h2 id="三、其他辅助工具"><a href="#三、其他辅助工具" class="headerlink" title="三、其他辅助工具"></a>三、其他辅助工具</h2><h3 id="3-1-jstack辅助工具"><a href="#3-1-jstack辅助工具" class="headerlink" title="3.1 jstack辅助工具"></a>3.1 jstack辅助工具</h3><p><strong>简介</strong>:使用jstack命令定位线程堆栈信息时，需要找到最耗费cpu资源的线程，top命令开启线程显示模式、 按CPU使用率排序、记下Java进程里CPU高的线程号;手动转成十六进制(可以用printf %x 1234); jstack，grep十六进制的线程id，找到线程栈。查问题时，会要多次这样操作，太繁琐。<br>此时就可以使用show_busy_java_threads.sh脚本，它功能是，打印出在运行的Java进程中，消耗CPU 最多的线程栈(缺省是5个线程)。此脚本github地址为: <a href="https://github.com/oldratlee/useful-scripts/blob/dev-2.x/docs/java.md" target="_blank" rel="noopener">https://github.com/oldratlee/useful-scripts/blob/dev-2.x/docs/java.md</a></p>
+<p><strong>用法</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sh show-busy-java-threads.sh</span><br><span class="line">sh show-busy-java-threads.sh -c &lt;要显示的线程栈数&gt;</span><br><span class="line">sh show-busy-java-threads.sh -c &lt;要显示的线程栈数&gt; -p &lt;指定的Java Process&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023-04-20/jvm-analyzer/show_busy_java_threads.png" alt="show_busy_java_threads"></p>
+<h3 id="3-2-gc日志分析工具"><a href="#3-2-gc日志分析工具" class="headerlink" title="3.2 gc日志分析工具"></a>3.2 gc日志分析工具</h3><p><strong>简介</strong>: gc日志辅助分析工具:<a href="http://gceasy.io/" target="_blank" rel="noopener">http://gceasy.io/</a><br><strong>用法</strong>: 将下载的gc日志打压成压缩包，如zip gc.zip iflight-policyprice-service.gc.log，后进行上传分析。<br>分析结果展示:<br><img src="/2023-04-20/jvm-analyzer/gceasy.png" alt="gceasy"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags d/java/" rel="tag"># java</a>
+          
+            <a href="/tags d/jvm/" rel="tag"># jvm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2023-04-17/jmap-histo/" rel="next" title="分析通过jmap等命令获取的JVM heap dump文件中，Class name列 [Z [B [C [L [D [F [I [J [S字符的含义">
+                <i class="fa fa-chevron-left"></i> 分析通过jmap等命令获取的JVM heap dump文件中，Class name列 [Z [B [C [L [D [F [I [J [S字符的含义
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2023-04-20/mat/" rel="prev" title="MAT 使用手册">
+                MAT 使用手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wencheng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Jvm性能监控与故障处理"><span class="nav-number">1.</span> <span class="nav-text">Jvm性能监控与故障处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在开头"><span class="nav-number">1.0.1.</span> <span class="nav-text">写在开头</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#一、命令行工具"><span class="nav-number">2.</span> <span class="nav-text">一、命令行工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、Sun-Jdk监控和故障处理工具"><span class="nav-number">2.1.</span> <span class="nav-text">1、Sun Jdk监控和故障处理工具:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、常用用法"><span class="nav-number">2.2.</span> <span class="nav-text">2、常用用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、命令详解"><span class="nav-number">2.3.</span> <span class="nav-text">3、命令详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jps"><span class="nav-number">2.3.1.</span> <span class="nav-text">jps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-number">2.3.2.</span> <span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat"><span class="nav-number">2.3.3.</span> <span class="nav-text">jstat</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jstat-gc-pid-200-10"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">jstat -gc pid 200 10</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jstat-gccapacity-pid"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">jstat -gccapacity pid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jstat-gcutil-pid"><span class="nav-number">2.3.3.3.</span> <span class="nav-text">jstat -gcutil pid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#监控各个代的情况"><span class="nav-number">2.3.3.4.</span> <span class="nav-text">监控各个代的情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinfo"><span class="nav-number">2.3.4.</span> <span class="nav-text">jinfo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jmap"><span class="nav-number">2.3.5.</span> <span class="nav-text">jmap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jmap-permstat-pid"><span class="nav-number">2.3.5.1.</span> <span class="nav-text">jmap -permstat pid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jmap-heap-pid"><span class="nav-number">2.3.5.2.</span> <span class="nav-text">jmap -heap pid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jmap-histo-live-pid"><span class="nav-number">2.3.5.3.</span> <span class="nav-text">jmap -histo[:live] pid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jmap-dump-format-b-file-dumpFileName-pid"><span class="nav-number">2.3.5.4.</span> <span class="nav-text">jmap -dump:format=b,file=dumpFileName pid</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、可视化工具"><span class="nav-number">2.4.</span> <span class="nav-text">二、可视化工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MAT"><span class="nav-number">2.4.1.</span> <span class="nav-text">MAT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程栈分析"><span class="nav-number">2.4.2.</span> <span class="nav-text">线程栈分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用功能"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">常用功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用示例"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">使用示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、其他辅助工具"><span class="nav-number">2.5.</span> <span class="nav-text">三、其他辅助工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-jstack辅助工具"><span class="nav-number">2.5.1.</span> <span class="nav-text">3.1 jstack辅助工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-gc日志分析工具"><span class="nav-number">2.5.2.</span> <span class="nav-text">3.2 gc日志分析工具</span></a></li></ol></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wencheng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

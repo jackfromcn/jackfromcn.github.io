@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iwatch,ECG,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="(转)自己开通 Apple Watch ECG 功能本文為全球首發教學，轉載請附上原本連結，謝謝。此外，在開始本教學之前，有幾點非常重要，請大家看清楚。 本教學僅供技術研究使用，在未經許可的國家開啟 ECG 功能，甚至販賣「開通的服務」可能觸犯當地相關法律Apple 有可能隨時改變遊戲規則跟 iCloud 污染法不同，這個方法如果換手機配對手錶可能需要重新操作一次，即使兩隻手機是用同一個 iClo">
+<meta name="keywords" content="iwatch,ECG">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(转)自己开通 Apple Watch ECG 功能">
+<meta property="og:url" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/index.html">
+<meta property="og:site_name" content="文成的博客">
+<meta property="og:description" content="(转)自己开通 Apple Watch ECG 功能本文為全球首發教學，轉載請附上原本連結，謝謝。此外，在開始本教學之前，有幾點非常重要，請大家看清楚。 本教學僅供技術研究使用，在未經許可的國家開啟 ECG 功能，甚至販賣「開通的服務」可能觸犯當地相關法律Apple 有可能隨時改變遊戲規則跟 iCloud 污染法不同，這個方法如果換手機配對手錶可能需要重新操作一次，即使兩隻手機是用同一個 iClo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/iMazing_Backup_Settings_jpg.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/iMazing_Click_Backup.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/iMazing_Device_Backups.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/ECG_activation_file_path.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/Select_ECG_activation_file.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/iMazing_Restore_Backup.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/iMazing_Export_Folder.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/iMazing_do_not_erase.jpg">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/ECG-Testing.jpg">
+<meta property="og:updated_time" content="2023-05-17T08:36:07.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(转)自己开通 Apple Watch ECG 功能">
+<meta name="twitter:description" content="(转)自己开通 Apple Watch ECG 功能本文為全球首發教學，轉載請附上原本連結，謝謝。此外，在開始本教學之前，有幾點非常重要，請大家看清楚。 本教學僅供技術研究使用，在未經許可的國家開啟 ECG 功能，甚至販賣「開通的服務」可能觸犯當地相關法律Apple 有可能隨時改變遊戲規則跟 iCloud 污染法不同，這個方法如果換手機配對手錶可能需要重新操作一次，即使兩隻手機是用同一個 iClo">
+<meta name="twitter:image" content="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/iMazing_Backup_Settings_jpg.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/">
+
+
+
+
+
+  <title>(转)自己开通 Apple Watch ECG 功能 | 文成的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">文成的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jackfromcn.github.io/2020-12-18/iwatch-ecg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wencheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="文成的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">(转)自己开通 Apple Watch ECG 功能</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-18T09:56:44+00:00">
+                2020-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="转-自己开通-Apple-Watch-ECG-功能"><a href="#转-自己开通-Apple-Watch-ECG-功能" class="headerlink" title="(转)自己开通 Apple Watch ECG 功能"></a>(转)自己开通 Apple Watch ECG 功能</h1><p>本文為全球首發教學，轉載請附上原本連結，謝謝。此外，在開始本教學之前，有幾點非常重要，請大家看清楚。</p>
+<p>本教學僅供技術研究使用，在未經許可的國家開啟 ECG 功能，甚至販賣「開通的服務」可能觸犯當地相關法律<br>Apple 有可能隨時改變遊戲規則<br>跟 iCloud 污染法不同，這個方法如果換手機配對手錶可能需要重新操作一次，即使兩隻手機是用同一個 iCloud 帳號也是。<br>必備條件：</p>
+<p>Apple Watch S4 以上版本<br>任何可以 Apple Watch 4 代以上的 iPhone<br>可開通的 iOS + watchOS 版本組合（請看下表）<br>iMazing (購買優惠網址，運費選 0 元，它不會真的寄出，賣家會訊息給你正版序號)，PC / Mac 應該都可以，Windows 請確定你的系統是 64bit 的才行<br>ECG 啟用檔案 (<a href="/download/2020/2020-12-18-iwatch-ecg/ECG_Activate.zip">v1</a>、<a href="/download/2020/2020-12-18-iwatch-ecg/ECG_Activate_v2.zip">v2</a>) 下載之後請解壓縮，會得到一個 .plist 檔案<br>手機的「健康」App 必須要有任何紀錄（正常應該都會有啦…）</p>
+<p>版本組合與可用狀態：</p>
+<table>
+<thead>
+<tr>
+<th>iOS</th>
+<th>watchOS</th>
+<th>可用此法開通</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>12.2 ~ 13.1.1</td>
+<td>5.2 ~ 6.0</td>
+<td>未知（可能可以）</td>
+</tr>
+<tr>
+<td>13.1.2 ~ 13.3.1</td>
+<td>6.0.1 ~ 6.1.3</td>
+<td>可，限定可開通 ECG 國家</td>
+</tr>
+<tr>
+<td>13.4 ~ 13.4.1</td>
+<td>6.2 ~ 6.2.1</td>
+<td>不可</td>
+</tr>
+<tr>
+<td>13.5 ~ 13.7</td>
+<td>6.2.5 ~ 6.2.8</td>
+<td>可，任何國家</td>
+</tr>
+<tr>
+<td>14.0 ~</td>
+<td>6.2.5 ~ 6.2.8</td>
+<td>可，任何國家</td>
+</tr>
+<tr>
+<td>14.0 ~</td>
+<td>7.0 ~ 7.0.1</td>
+<td>不可，這是 watchOS 的 bug，請升級</td>
+</tr>
+<tr>
+<td>14.0 ~ 14.2</td>
+<td>7.0.2~7.1</td>
+<td>可</td>
+</tr>
+<tr>
+<td>14.3 ~</td>
+<td>7.2 ~</td>
+<td>可，使用 v2 檔案</td>
+</tr>
+</tbody></table>
+<p>注意：已知iOS 14 以上很容易恢復備份後死機，這是 iOS 14 的 bug，並不是 iMazing 的問題，請先預留足夠的時間進行重複操作，以防萬一。</p>
+<p>測試環境：</p>
+<ol>
+<li>台版 iPhone XR iOS 13.1.2（完全乾淨重刷，手機地區完全不影響）</li>
+<li>Apple Watch 4 代港版 watchOS 6.0.1</li>
+<li>日本 iCloud 帳號（日本為非開通地區，帳號地區完全不影響）</li>
+</ol>
+<p>在之前跟 x43x61x69 大大的研究中，我注意到了開啟 ECG 功能之後會在「健康」紀錄裡面寫入兩個標記。所以反過來說，我們只要把「健康」資料裡面寫入那兩個標記，不就開通了嗎？</p>
+<p>經過詳細的研究之後，我發現確實跟這兩個標記有關，但是並非直接改「健康」資料，而是用更簡單的方法。但無論如何，需要修改手機的備份檔案。這時候就要用第三方軟體 iMazing 了，如果你沒有購買的話，可以點這邊購買正版，官網賣 45 美金（約 1400 台幣），透過折價券只要 94 人民幣（400 台幣左右），如果你有兩台電腦，買雙授權更划算！</p>
+<p>更新：iMazing 偷吃步免付費法可以繼續往下看</p>
+<p>為了讓手錶能夠正確讀取我們之後導入的 ECG 開通資訊，請先<strong>解除手錶的配對</strong>。接著，用 iMazing 對手機做一次加密備份，打開 iMazing 應該會跳出如下的畫面叫你設定備份選項。</p>
+<p>▼ 接著注意設定如下，<strong>備份加密的選項一定要開，否則你之前的「健康」紀錄不會備份到</strong>，其他選項可以照自己的意思隨意調整，預設狀態不用動也可以。<br><img src="/2020-12-18/iwatch-ecg/iMazing_Backup_Settings_jpg.jpg" alt></p>
+<p>▼ 設定完成之後，就按備份以建立一份加密備份<br><img src="/2020-12-18/iwatch-ecg/iMazing_Click_Backup.jpg" alt></p>
+<p>▼ 接著，按上面的按鈕以顯示所有備份，再選擇我們剛剛的備份，最後再選擇編輯<br><img src="/2020-12-18/iwatch-ecg/iMazing_Device_Backups.jpg" alt></p>
+<p>接下來會 iMazing 會跟你說亂改備份很危險，要先叫你做「備份的備份」，就直接按繼續，等他跑完。</p>
+<p>▼ 再來，看到 iMazing 左邊往下滑，會出現「可以編輯的備份」，按照下圖選到 <code>HomeDomain/Library/Preferences</code> 裡面<br><img src="/2020-12-18/iwatch-ecg/ECG_activation_file_path.jpg" alt></p>
+<p>接著，找到我們上面說要下載的「ECG 啟用檔案」，解壓縮得到一個 <code>com.apple.private.health.heart-rhythm.plist</code></p>
+<p>▼ 把這個檔案複製到備份檔的 <code>HomeDomain/Library/Preferences</code> 資料夾底下，如果出現警告說要覆蓋，就確定讓他覆蓋吧<br><img src="/2020-12-18/iwatch-ecg/Select_ECG_activation_file.jpg" alt></p>
+<p>▼ 選回我們修改過的備份，然後按「還原」，接下來選機器<br><img src="/2020-12-18/iwatch-ecg/iMazing_Restore_Backup.jpg" alt></p>
+<p>▼ 補充 iMazing 偷吃步免費法：對剛剛修改好的備份選擇用資料夾方式輸出，然後放到 <code>~/Library/Application Support/MobileSync/Backup/</code> 底下，之後再用 Finder/iTunes 還原備份（不透過 iMazing 還原），這樣過程就完全不需要用到 iMazing 付費功能！（路徑為 macOS 用，Windows 版請爬文找對應路徑）<br><img src="/2020-12-18/iwatch-ecg/iMazing_Export_Folder.jpg" alt></p>
+<p>▼ 如果你有用 eSIM，請不要勾選 iMazing 的「清除內容」，有可能導致 eSIM 消失，如果空間不足，先去刪照片、或者同步的音樂之類的，反正備份會還原照片，甚至 DFU 重刷也可以，DFU 不會導致 eSIM 消失<br><img src="/2020-12-18/iwatch-ecg/iMazing_do_not_erase.jpg" alt></p>
+<p>還原完成之後，重新配對 Apple Watch，請選擇新的 Apple Watch，<strong>不要還原手錶備份</strong>。</p>
+<p>配對完成之後，你就可以使用 ECG 功能了。如果配對完成後發現心電圖 App 一直卡在安裝中，嘗試重開機，重開機若無效，需要重新配對，但應該就會正常。<br><img src="/2020-12-18/iwatch-ecg/ECG-Testing.jpg" alt></p>
+<p>附註：若出現 com.apple.security.xpc error 訊息，請直接在手機裡面選擇清除所有資料與內容，再嘗試還原備份</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://hiraku.tw/2019/10/4911/" target="_blank" rel="noopener">不求人，自己開通海外版本 Apple Watch ECG 功能</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags d/iwatch/" rel="tag"># iwatch</a>
+          
+            <a href="/tags d/ECG/" rel="tag"># ECG</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020-12-17/mysql-lock/" rel="next" title="MySQL锁机制知识">
+                <i class="fa fa-chevron-left"></i> MySQL锁机制知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021-02-01/marginnote3/" rel="prev" title="(转)拯救marginnote3">
+                (转)拯救marginnote3 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wencheng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#转-自己开通-Apple-Watch-ECG-功能"><span class="nav-number">1.</span> <span class="nav-text">(转)自己开通 Apple Watch ECG 功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wencheng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="源码,Tools,spring,hystrix,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="hystrix 原理初探HystrixHystrix设计目标  对来自依赖的延迟和故障进行防护和控制——这些依赖通常都是通过网络访问的 阻止故障的连锁反应 快速失败并迅速恢复 回退并优雅降级 提供近实时的监控与告警  Hystrix遵循的设计原则  防止任何单独的依赖耗尽资源（线程） 过载立即切断并快速失败，防止排队 尽可能提供回退以保护用户免受故障 使用隔离技术（例如隔板，泳道和断路器模式）来限">
+<meta name="keywords" content="源码,Tools,spring,hystrix">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hystrix 原理">
+<meta property="og:url" content="https://jackfromcn.github.io/2020-10-20/hystrix/index.html">
+<meta property="og:site_name" content="文成的博客">
+<meta property="og:description" content="hystrix 原理初探HystrixHystrix设计目标  对来自依赖的延迟和故障进行防护和控制——这些依赖通常都是通过网络访问的 阻止故障的连锁反应 快速失败并迅速恢复 回退并优雅降级 提供近实时的监控与告警  Hystrix遵循的设计原则  防止任何单独的依赖耗尽资源（线程） 过载立即切断并快速失败，防止排队 尽可能提供回退以保护用户免受故障 使用隔离技术（例如隔板，泳道和断路器模式）来限">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-10-20/hystrix/174915_Bvjy_2663573.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-10-20/hystrix/111924_txyW_2663573.png">
+<meta property="og:image" content="https://jackfromcn.github.io/2020-10-20/hystrix/155833_vCne_2663573.png">
+<meta property="og:updated_time" content="2023-05-17T08:36:07.383Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hystrix 原理">
+<meta name="twitter:description" content="hystrix 原理初探HystrixHystrix设计目标  对来自依赖的延迟和故障进行防护和控制——这些依赖通常都是通过网络访问的 阻止故障的连锁反应 快速失败并迅速恢复 回退并优雅降级 提供近实时的监控与告警  Hystrix遵循的设计原则  防止任何单独的依赖耗尽资源（线程） 过载立即切断并快速失败，防止排队 尽可能提供回退以保护用户免受故障 使用隔离技术（例如隔板，泳道和断路器模式）来限">
+<meta name="twitter:image" content="https://jackfromcn.github.io/2020-10-20/hystrix/174915_Bvjy_2663573.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jackfromcn.github.io/2020-10-20/hystrix/">
+
+
+
+
+
+  <title>hystrix 原理 | 文成的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">文成的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jackfromcn.github.io/2020-10-20/hystrix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wencheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="文成的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hystrix 原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-20T14:56:36+00:00">
+                2020-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="hystrix-原理"><a href="#hystrix-原理" class="headerlink" title="hystrix 原理"></a>hystrix 原理</h1><h2 id="初探Hystrix"><a href="#初探Hystrix" class="headerlink" title="初探Hystrix"></a>初探Hystrix</h2><p><strong>Hystrix设计目标</strong></p>
+<ul>
+<li>对来自依赖的延迟和故障进行防护和控制——这些依赖通常都是通过网络访问的</li>
+<li>阻止故障的连锁反应</li>
+<li>快速失败并迅速恢复</li>
+<li>回退并优雅降级</li>
+<li>提供近实时的监控与告警</li>
+</ul>
+<p><strong>Hystrix遵循的设计原则</strong></p>
+<ul>
+<li>防止任何单独的依赖耗尽资源（线程）</li>
+<li>过载立即切断并快速失败，防止排队</li>
+<li>尽可能提供回退以保护用户免受故障</li>
+<li>使用隔离技术（例如隔板，泳道和断路器模式）来限制任何一个依赖的影响</li>
+<li>通过近实时的指标，监控和告警，确保故障被及时发现</li>
+<li>通过动态修改配置属性，确保故障及时恢复</li>
+<li>防止整个依赖客户端执行失败，而不仅仅是网络通信</li>
+</ul>
+<p><strong>Hystrix如何实现这些设计目标？</strong></p>
+<ul>
+<li>使用命令模式将所有对外部服务（或依赖关系）的调用包装在 <code>HystrixCommand</code> 或 <code>HystrixObservableCommand</code> 对象中，并将该对象放在单独的线程中执行；</li>
+<li>每个依赖都维护着一个线程池（或信号量），线程池被耗尽则拒绝请求（而不是让请求排队）。</li>
+<li>记录请求成功，失败，超时和线程拒绝。</li>
+<li>服务错误百分比超过了阈值，熔断器开关自动打开，一段时间内停止对该服务的所有请求。</li>
+<li>请求失败，被拒绝，超时或熔断时执行降级逻辑。</li>
+<li>近实时地监控指标和配置的修改。</li>
+</ul>
+<h2 id="Hystrix流程"><a href="#Hystrix流程" class="headerlink" title="Hystrix流程"></a>Hystrix流程</h2><p><img src="/2020-10-20/hystrix/174915_Bvjy_2663573.png" alt="Hystrix流程图"></p>
+<center>图片来源Hystrix官网: https://github.com/Netflix/Hystrix/wiki</center>
+
+<p><strong>Hystrix整个工作流如下</strong></p>
+<ol>
+<li><span id="t2_step1">构造一个 <code>HystrixCommand</code> 或 <code>HystrixObservableCommand</code> 对象，用于封装请求，并在构造方法配置请求被执行需要的参数；</span></li>
+<li><span id="t2_step2">执行命令，<code>Hystrix</code> 提供了4种执行命令的方法，后面详述；</span></li>
+<li><span id="t2_step3">判断是否使用缓存响应请求，若启用了缓存，且缓存可用，直接使用缓存响应请求。<code>Hystrix</code> 支持请求缓存，但需要用户自定义启动；</span></li>
+<li><span id="t2_step4">判断熔断器是否打开，如果打开，跳到<a href="#t2_step8">第8步</a>；</span></li>
+<li><span id="t2_step5">判断线程池/队列/信号量是否已满，已满则跳到<a href="#t2_step8">第8步</a>；</span></li>
+<li><span id="t2_step6">执行 <code>HystrixObservableCommand.construct()</code> 或 <code>HystrixCommand.run()</code>，如果执行失败或者超时，跳到<a href="#t2_step8">第8步</a>；否则，跳到<a href="#t2_step9">第9步</a>；</span></li>
+<li><span id="t2_step7">统计熔断器监控指标；</span></li>
+<li><span id="t2_step8">走 Fallback 备用逻辑</span></li>
+<li><span id="t2_step9">返回请求响应</span></li>
+</ol>
+<p>从流程图上可知道，第5步线程池/队列/信号量已满时，还会执行第7步逻辑，更新熔断器统计信息，而第6步无论成功与否，都会更新熔断器统计信息。</p>
+<h2 id="Hystrix容错"><a href="#Hystrix容错" class="headerlink" title="Hystrix容错"></a>Hystrix容错</h2><p>Hystrix 的容错主要是通过添加容许延迟和容错方法，帮助控制这些分布式服务之间的交互。 还通过隔离服务之间的访问点，阻止它们之间的级联故障以及提供回退选项来实现这一点，从而提高系统的整体弹性。Hystrix主要提供了以下几种容错方法</p>
+<ul>
+<li>资源隔离</li>
+<li>熔断</li>
+<li>降级</li>
+</ul>
+<h3 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h3><p>资源隔离主要指对线程的隔离。Hystrix 提供了两种线程隔离方式：线程池和信号量。</p>
+<h4 id="线程隔离-线程池"><a href="#线程隔离-线程池" class="headerlink" title="线程隔离-线程池"></a>线程隔离-线程池</h4><p>Hystrix 通过命令模式对发送请求的对象和执行请求的对象进行解耦，将不同类型的业务请求封装为对应的命令请求。如订单服务查询商品，查询商品请求-&gt;商品Command；商品服务查询库存，查询库存请求-&gt;库存Command。并且为每个类型的Command配置一个线程池，当第一次创建Command时，根据配置创建一个线程池，并放入 ConcurrentHashMap，如商品Command：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> ConcurrentHashMap&lt;String, HystrixThreadPool&gt; threadPools = <span class="keyword">new</span> ConcurrentHashMap&lt;String, HystrixThreadPool&gt;();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span> (!threadPools.containsKey(key)) &#123;</span><br><span class="line">    threadPools.put(key, <span class="keyword">new</span> HystrixThreadPoolDefault(threadPoolKey, propertiesBuilder));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>后续查询商品的请求创建Command时，将会重用已创建的线程池。线程池隔离之后的服务依赖关系：</p>
+<h5 id="线程池隔离优缺点"><a href="#线程池隔离优缺点" class="headerlink" title="线程池隔离优缺点"></a>线程池隔离优缺点</h5><p><strong>优点</strong></p>
+<ul>
+<li>保护应用程序以免受来自依赖故障的影响，指定依赖线程池饱和不会影响应用程序的其余部分。</li>
+<li>当引入新客户端lib时，即使发生问题，也是在本lib中，并不会影响到其他内容。</li>
+<li>当依赖从故障恢复正常时，应用程序会立即恢复正常的性能。</li>
+<li>当应用程序一些配置参数错误时，线程池的运行状况会很快检测到这一点（通过增加错误，延迟，超时，拒绝等），同时可以通过动态属性进行实时纠正错误的参数配置。</li>
+<li>如果服务的性能有变化，需要实时调整，比如增加或者减少超时时间，更改重试次数，可以通过线程池指标动态属性修改，而且不会影响到其他调用请求。</li>
+<li>除了隔离优势外，hystrix 拥有专门的线程池可提供内置的并发功能，使得可以在同步调用之上构建异步门面（外观模式），为异步编程提供了支持（Hystrix 引入了 Rxjava 异步框架）。</li>
+</ul>
+<p><strong>注意</strong>：尽管线程池提供了线程隔离，我们的客户端底层代码也必须要有超时设置或响应线程中断，不能无限制的阻塞以致线程池一直饱和。</p>
+<p><strong>缺点</strong><br>线程池的主要缺点是增加了计算开销。每个命令的执行都在单独的线程完成，增加了排队、调度和上下文切换的开销。因此，要使用Hystrix，就必须接受它带来的开销，以换取它所提供的好处。</p>
+<p>通常情况下，线程池引入的开销足够小，不会有重大的成本或性能影响。但对于一些访问延迟极低的服务，如只依赖内存缓存，线程池引入的开销就比较明显了，这时候使用线程池隔离技术就不适合了，我们需要考虑更轻量级的方式，如信号量隔离。</p>
+<h5 id="线程隔离-信号量"><a href="#线程隔离-信号量" class="headerlink" title="线程隔离-信号量"></a>线程隔离-信号量</h5><p>上面提到了线程池隔离的缺点，当依赖延迟极低的服务时，线程池隔离技术引入的开销超过了它所带来的好处。这时候可以使用信号量隔离技术来代替，通过设置信号量来限制对任何给定依赖的并发调用量。下图说明了线程池隔离和信号量隔离的主要区别：<br><img src="/2020-10-20/hystrix/111924_txyW_2663573.png" alt="线程隔离-信号量"></p>
+<center>图片来源Hystrix官网https://github.com/Netflix/Hystrix/wiki</center>
+
+<p>由于Hystrix默认使用线程池做线程隔离，使用信号量隔离需要显示地将属性 <code>execution.isolation.strategy</code> 设置为 <code>ExecutionIsolationStrategy.SEMAPHORE</code>，同时配置信号量个数，默认为10。客户端需向依赖服务发起请求时，首先要获取一个信号量才能真正发起调用，由于信号量的数量有限，当并发请求量超过信号量个数时，后续的请求都会直接拒绝，进入 fallback 流程。</p>
+<p>信号量隔离主要是通过控制并发请求量，防止请求线程大面积阻塞，从而达到限流和防止雪崩的目的。</p>
+<h5 id="线程隔离总结"><a href="#线程隔离总结" class="headerlink" title="线程隔离总结"></a>线程隔离总结</h5><p>线程池和信号量都可以做线程隔离，但各有各的优缺点和支持的场景，对比如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>线程切换</th>
+<th>支持异步</th>
+<th>支持超时</th>
+<th>支持熔断</th>
+<th>限流</th>
+<th>开销</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>信号量</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+<td>小</td>
+</tr>
+<tr>
+<td>线程池</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>大</td>
+</tr>
+</tbody></table>
+<p>线程池和信号量都支持熔断和限流。相比线程池，信号量不需要线程切换，因此避免了不必要的开销。但是信号量不支持异步，也不支持超时，也就是说当所请求的服务不可用时，信号量会控制超过限制的请求立即返回，但是已经持有信号量的线程只能等待服务响应或从超时中返回，即可能出现长时间等待。线程池模式下，当超过指定时间未响应的服务，Hystrix 会通过响应中断的方式通知线程立即结束并返回。</p>
+<h3 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h3><h4 id="熔断器简介"><a href="#熔断器简介" class="headerlink" title="熔断器简介"></a>熔断器简介</h4><p>现实生活中，可能大家都有注意到家庭电路中通常会安装一个保险盒，当负载过载时，保险盒中的保险丝会自动熔断，以保护电路及家里的各种电器，这就是熔断器的一个常见例子。Hystrix 中的熔断器(Circuit Breaker)也是起类似作用，Hystrix 在运行过程中会向每个 <code>commandKey</code> 对应的熔断器报告成功、失败、超时和拒绝的状态，熔断器维护并统计这些数据，并根据这些统计信息来决策熔断开关是否打开。如果打开，熔断后续请求，快速返回。隔一段时间（默认是5s）之后熔断器尝试半开，放入一部分流量请求进来，相当于对依赖服务进行一次健康检查，如果请求成功，熔断器关闭。</p>
+<h4 id="熔断器配置"><a href="#熔断器配置" class="headerlink" title="熔断器配置"></a>熔断器配置</h4><p>Circuit Breaker主要包括如下6个参数：</p>
+<ol>
+<li><code>circuitBreaker.enabled</code><br> 是否启用熔断器，默认是 <strong>TRUE</strong>。</li>
+<li><code>circuitBreaker.forceOpen</code><br> 熔断器强制打开，始终保持打开状态，不关注熔断开关的实际状态。默认值 <strong>FLASE</strong>。</li>
+<li><code>circuitBreaker.forceClosed</code><br> 熔断器强制关闭，始终保持关闭状态，不关注熔断开关的实际状态。默认值 <strong>FLASE</strong>。</li>
+<li><code>circuitBreaker.errorThresholdPercentage</code><br> 错误率，默认值 50%，例如一段时间（10s）内有 100 个请求，其中有 54 个超时或者异常，那么这段时间内的错误率是 54%，大于了默认值 50%，这种情况下会触发熔断器打开。</li>
+<li><code>circuitBreaker.requestVolumeThreshold</code><br> 默认值 20。含义是一段时间内至少有20个请求才进行 <code>errorThresholdPercentage</code> 计算。比如一段时间了有 19 个请求，且这些请求全部失败了，错误率是 100%，但熔断器不会打开，总请求数不满足 20。</li>
+<li><code>circuitBreaker.sleepWindowInMilliseconds</code><br> 半开状态试探睡眠时间，默认值 5000ms。如：当熔断器开启 5000ms 之后，会尝试放过去一部分流量进行试探，确定依赖服务是否恢复。</li>
+</ol>
+<h4 id="熔断器工作原理"><a href="#熔断器工作原理" class="headerlink" title="熔断器工作原理"></a>熔断器工作原理</h4><p>下图展示了 HystrixCircuitBreaker 的工作原理:<br><img src="/2020-10-20/hystrix/155833_vCne_2663573.png" alt="HystrixCircuitBreaker的工作原理"></p>
+<p><strong>熔断器工作的详细过程如下</strong><br><strong>第一步</strong>，调用 <code>allowRequest()</code> 判断是否允许将请求提交到线程池</p>
+<ol>
+<li>如果熔断器强制打开，<code>circuitBreaker.forceOpen</code> 为true，不允许放行，返回。</li>
+<li>如果熔断器强制关闭，<code>circuitBreaker.forceClosed</code> 为true，允许放行。此外不必关注熔断器实际状态，也就是说熔断器仍然会维护统计数据和开关状态，只是不生效而已。</li>
+</ol>
+<p><strong>第二步</strong>，调用 <code>isOpen()</code> 判断熔断器开关是否打开</p>
+<ol>
+<li>如果熔断器开关打开，进入第三步，否则继续；</li>
+<li>如果一个周期内总的请求数小于 <code>circuitBreaker.requestVolumeThreshold</code> 的值，允许请求放行，否则继续；</li>
+<li>如果一个周期内错误率小于 <code>circuitBreaker.errorThresholdPercentage</code> 的值，允许请求放行。否则，打开熔断器开关，进入第三步。</li>
+</ol>
+<p><strong>第三步</strong>，调用 <code>allowSingleTest()</code> 判断是否允许单个请求通行，检查依赖服务是否恢复</p>
+<ol>
+<li>如果熔断器打开，且距离熔断器打开的时间或上一次试探请求放行的时间超过 circuitBreaker.sleepWindowInMilliseconds 的值时，熔断器器进入半开状态，允许放行一个试探请求；否则，不允许放行。</li>
+</ol>
+<p>此外，为了提供决策依据，每个熔断器默认维护了10个 bucket，每秒一个 bucket，当新的 bucket 被创建时，最旧的 bucket 会被抛弃。其中每个blucket维护了请求成功、失败、超时、拒绝的计数器，Hystrix 负责收集并统计这些计数器。</p>
+<h3 id="回退降级"><a href="#回退降级" class="headerlink" title="回退降级"></a>回退降级</h3><p>降级，通常指务高峰期，为了保证核心服务正常运行，需要停掉一些不太重要的业务，或者某些服务不可用时，执行备用逻辑从故障服务中快速失败或快速返回，以保障主体业务不受影响。Hystrix提供的降级主要是为了容错，保证当前服务不受依赖服务故障的影响，从而提高服务的健壮性。要支持回退或降级处理，可以重写 HystrixCommand 的 getFallBack 方法或 HystrixObservableCommand的resumeWithFallback 方法。</p>
+<p>Hystrix在以下几种情况下会走降级逻辑：</p>
+<ul>
+<li>执行 <code>construct()</code> 或 <code>run()</code> 抛出异常</li>
+<li>熔断器打开导致命令短路</li>
+<li>命令的线程池和队列或信号量的容量超额，命令被拒绝</li>
+<li>命令执行超时</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了 Hystrix 及其工作原理，还介绍了 Hystrix 线程池隔离、信号量隔离和熔断器的工作原理，以及如何使用Hystrix的资源隔离，熔断和降级等技术实现服务容错，从而提高系统的整体健壮性。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://my.oschina.net/7001/blog/1619842" target="_blank" rel="noopener">Hystrix原理与实战</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags d/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags d/Tools/" rel="tag"># Tools</a>
+          
+            <a href="/tags d/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags d/hystrix/" rel="tag"># hystrix</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020-10-19/feign/" rel="next" title="Feign 原理">
+                <i class="fa fa-chevron-left"></i> Feign 原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020-10-26/hexo-daocloud-cicd/" rel="prev" title="通过DaoCloud的持续集成发布Hexo博客">
+                通过DaoCloud的持续集成发布Hexo博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wencheng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hystrix-原理"><span class="nav-number">1.</span> <span class="nav-text">hystrix 原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初探Hystrix"><span class="nav-number">1.1.</span> <span class="nav-text">初探Hystrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hystrix流程"><span class="nav-number">1.2.</span> <span class="nav-text">Hystrix流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hystrix容错"><span class="nav-number">1.3.</span> <span class="nav-text">Hystrix容错</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#资源隔离"><span class="nav-number">1.3.1.</span> <span class="nav-text">资源隔离</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程隔离-线程池"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">线程隔离-线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#线程池隔离优缺点"><span class="nav-number">1.3.1.1.1.</span> <span class="nav-text">线程池隔离优缺点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#线程隔离-信号量"><span class="nav-number">1.3.1.1.2.</span> <span class="nav-text">线程隔离-信号量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#线程隔离总结"><span class="nav-number">1.3.1.1.3.</span> <span class="nav-text">线程隔离总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#熔断"><span class="nav-number">1.3.2.</span> <span class="nav-text">熔断</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#熔断器简介"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">熔断器简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#熔断器配置"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">熔断器配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#熔断器工作原理"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">熔断器工作原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回退降级"><span class="nav-number">1.3.3.</span> <span class="nav-text">回退降级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.5.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wencheng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
